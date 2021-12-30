@@ -1,6 +1,7 @@
 import React from "react";
 import Meals from "./Meals";
 import Motivation from "./Motivation";
+import Schedule from "./Schedule";
 import Sleep from "./Sleep";
 import Tasks from "./Tasks";
 
@@ -11,6 +12,7 @@ function Body() {
       <Meals />
       <Tasks />
       <Motivation />
+      <Schedule />
     </div>
   );
 }
