@@ -4,9 +4,7 @@ function Motivation() {
   return (
     <div>
       <h2>Motivation & Affirmations</h2>
-      <form action="">
-        <input type="text" />
-      </form>
+      <textarea cols="30" rows="10"></textarea>
     </div>
   );
 }

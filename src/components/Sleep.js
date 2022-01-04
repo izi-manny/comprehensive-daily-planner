@@ -3,9 +3,12 @@ import React from "react";
 function Sleep() {
   return (
     <div>
-      <form action="">
-        <input type="text" placeholder="Log last night's sleep" />
-      </form>
+      <h1>Sleep Log</h1>
+      <textarea
+        cols="30"
+        rows="10"
+        placeholder="Log last night's sleep here"
+      ></textarea>
     </div>
   );
 }

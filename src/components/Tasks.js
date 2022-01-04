@@ -1,23 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Tasks() {
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
       <h2>Tasks & Goals</h2>
-      <form action="">
-        <div>
-          <input type="checkbox" name="" id="" />
-          <input type="text" />
-        </div>
-        <div>
-          <input type="checkbox" name="" id="" />
-          <input type="text" />
-        </div>
-        <div>
-          <input type="checkbox" name="" id="" />
-          <input type="text" />
-        </div>
-      </form>
+      <input type="text" placeholder="Add a task/goal" value={input} />
+      <button className="fas fa-plus-circle"></button>
     </div>
   );
 }

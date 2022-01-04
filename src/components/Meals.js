@@ -2,41 +2,37 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function Meals() {
-  const [input, setInput] = useState("");
+  //   const [input, setInput] = useState("");
 
-  const [breakfast, setBreakfast] = useState([
-    {
-      meal_id: 1,
-      meal_category: "Breakfast",
-      meal_title: "Omlet",
-      user_id: 1,
-      date: 12 / 27 / 2021,
-    },
-    {
-      meal_id: 2,
-      meal_category: "Breakfast",
-      meal_title: "Toast",
-      user_id: 1,
-      date: 12 / 27 / 2021,
-    },
-  ]);
+  const [breakfast, setBreakfast] = useState([]);
 
-  const [lunch, setLunch] = useState([
+  const [lunch, setLunch] = useState([]);
+
+  const [dinner, setDinner] = useState([
     {
-      meal_id: 3,
-      meal_category: "Lunch",
-      meal_title: "Steak Sandwich",
+      meal_id: 4,
+      meal_category: "dinner",
+      meal_title: "Chicken",
       user_id: 1,
       date: 12 / 27 / 2021,
     },
   ]);
 
-  function sendBreakfast() {
+  const [snacks, setSnacks] = useState([
+    {
+      meal_id: 5,
+      meal_category: "snacks",
+      meal_title: "Protein bar",
+      user_id: 1,
+      date: 12 / 27 / 2021,
+    },
+  ]);
+
+  function sendForm(input, category) {
     axios
-      .post("/api/meals/breakfast", {
-        breakfastTitle: breakfast,
+      .post(`http://localhost:5000/api/meals/${category}`, {
+        breakfastTitle: input,
         userID: 1,
-        category: "Breakfast",
         date: new Date(),
       })
       .then((res) => {
@@ -49,8 +45,8 @@ function Meals() {
 
   function submitForm(e) {
     e.preventDefault();
-    console.log(e);
-    setInput(e.target[0].value);
+    console.log(e.target.firstChild.innerHTML);
+    sendForm(e.target[0].value, e.target.firstChild.innerHTML);
   }
 
   function breakfastMap() {
@@ -61,41 +57,42 @@ function Meals() {
     return lunch.map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
   }
 
+  function dinnerMap() {
+    return dinner.map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
+  }
+
   return (
     <div>
       <h1>Meals</h1>
 
-      <h2>Breakfast</h2>
       <form onSubmit={submitForm}>
-        <input type="text" id="breakfast" />
+        <h2>Breakfast</h2>
+        <input
+          type="text"
+          id="breakfast"
+          placeholder="What would you like for breakfast?"
+        />
         <button className="fas fa-plus-circle"></button>
       </form>
 
-      {breakfastMap()}
+      {/* {breakfastMap()} */}
 
-      <textarea
-        id=""
-        cols="30"
-        rows="10"
-        placeholder="What would you like for breakfast?"
-      ></textarea>
-
-      <h2>Lunch</h2>
       <form onSubmit={submitForm}>
+        <h2>Lunch</h2>
         <input type="text" id="lunch" />
         <button className="fas fa-plus-circle"></button>
       </form>
 
-      {lunchMap()}
+      {/* {lunchMap()} */}
 
-      <h2>Dinner</h2>
       <form onSubmit={submitForm}>
+        <h2>Dinner</h2>
         <input type="text" id="dinner" />
         <button className="fas fa-plus-circle"></button>
       </form>
 
-      <h2>Snacks</h2>
       <form onSubmit={submitForm}>
+        <h2>Snacks</h2>
         <input type="text" id="snacks" />
         <button className="fas fa-plus-circle"></button>
       </form>

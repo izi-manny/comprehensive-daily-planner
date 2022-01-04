@@ -13,25 +13,43 @@ const sequelize = new Sequelize(CONNECTION_STRING, {
 });
 
 module.exports = {
-  breakfast: (req, res) => {
+  breakfast: async (req, res) => {
     // console log the req object
-    const { breakfastTitle, userID, category, date } = req.body;
+    const { breakfastTitle, userID, date } = req.body;
+    const { category } = req.params;
+    const result = await sequelize.query(
+      `INSERT INTO meals (
+            meal_category,
+            meal_title,
+            user_id,
+            date
+            )
+
+            VALUES (
+            '${category}',
+            '${breakfastTitle}',
+            ${userID},
+            '${date}'
+            )`
+    );
+    console.log(result);
+
     sequelize
       // console log sequelize
       .query(
         `INSERT INTO meals (
-        meal_category,
-        meal_title,
-        user_id,
-        date
-        )
-        
-        VALUES (
-        ${category},
-        ${breakfastTitle},
-        ${userID},
-        ${date}
-        )`
+            meal_category,
+            meal_title,
+            user_id,
+            date
+            )
+
+            VALUES (
+            '${category}',
+            '${breakfastTitle}',
+            ${userID},
+            '${date}'
+            )`
       )
       .then((dbRes) => res.status(200).send(dbRes[0]))
       .catch((err) => console.log(err));

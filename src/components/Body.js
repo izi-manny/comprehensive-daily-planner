@@ -1,4 +1,5 @@
 import React from "react";
+import Exercise from "./Exercise";
 import Meals from "./Meals";
 import Motivation from "./Motivation";
 import Schedule from "./Schedule";
@@ -12,6 +13,7 @@ function Body() {
       <Meals />
       <Tasks />
       <Motivation />
+      <Exercise />
       <Schedule />
     </div>
   );
