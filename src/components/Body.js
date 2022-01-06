@@ -8,13 +8,19 @@ import Tasks from "./Tasks";
 
 function Body() {
   return (
-    <div>
-      <Sleep />
-      <Meals />
-      <Tasks />
-      <Motivation />
-      <Exercise />
-      <Schedule />
+    <div className="app-body">
+      <div>
+        <Sleep />
+        <Meals />
+      </div>
+      <div>
+        <Schedule />
+      </div>
+      <div>
+        <Tasks />
+        <Motivation />
+        <Exercise />
+      </div>
     </div>
   );
 }

@@ -1,38 +1,189 @@
-.App {
+.planner-app {
+  background-image: url("./assets/federico-respini-sYffw0LNr7s-unsplash.jpg");
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-repeat: repeat;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.app-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 30px;
+  padding: 20px;
+  min-height: 260px;
+}
+
+.app-body {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  /* grid-gap: 10px; */
+  align-content: center;
+  justify-content: space-around;
+  justify-items: center;
+  height: 100vh;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.feature-container {
+  background-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin: 10px;
+  padding: 5px;
+  min-height: 180px;
+  min-width: 320px;
+  transition: all 0.45s ease-in-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.feature-container:hover {
+  background-color: rgba(255, 255, 255, 0.65);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+textarea {
+  resize: none;
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px;
 }
 
-.App-link {
-  color: #61dafb;
+/* textarea:focus {
+  outline: none;
+} */
+
+blockquote {
+  font-weight: 100;
+  font-size: 1.2rem;
+  max-width: 600px;
+  line-height: 1.4;
+  position: relative;
+  margin: 0;
+  padding: 0.5rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+blockquote:before,
+blockquote:after {
+  position: absolute;
+  color: #f1efe6;
+  font-size: 8rem;
+  width: 4rem;
+  height: 4rem;
+}
+
+blockquote:before {
+  content: "\201c";
+  font-family: "special-elite";
+  /* content: "“"; */
+  left: -5rem;
+  top: -2rem;
+}
+
+blockquote:after {
+  font-family: "special-elite";
+  content: "”";
+  right: -5rem;
+  bottom: 1rem;
+}
+
+cite {
+  line-height: 3;
+  text-align: left;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #cdcdcd;
+  outline: none;
+  background-color: #ffffffb7;
+  height: 50px;
+  margin: 10px;
+}
+
+input::placeholder {
+  color: #000000c4;
+  font-size: 1rem;
+  font-weight: 200;
+}
+
+.icon-btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #cdcdcd;
+  background: rgba(255, 255, 255, 0.479);
+  border-radius: 25px;
+  overflow: hidden;
+  position: relative;
+  transition: width 0.2s ease-in-out;
+}
+.add-btn:hover {
+  width: 120px;
+}
+.add-btn::before,
+.add-btn::after {
+  transition: width 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 10px;
+  top: calc(50% - 2px);
+  background: rgb(0, 238, 255);
+}
+.add-btn::after {
+  right: 14px;
+  overflow: hidden;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+.add-btn::before {
+  left: 14px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+.icon-btn:focus {
+  outline: none;
+}
+.btn-txt {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.add-btn:hover::before,
+.add-btn:hover::after {
+  width: 4px;
+  border-radius: 2px;
+}
+.add-btn:hover .btn-txt {
+  opacity: 1;
+}
+.add-icon::after,
+.add-icon::before {
+  transition: all 0.2s ease-in-out;
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 2px;
+  top: calc(50% - 10px);
+  background: rgb(0, 238, 255);
+  overflow: hidden;
+}
+.add-icon::before {
+  left: 22px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+.add-icon::after {
+  right: 22px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+.add-btn:hover .add-icon::before {
+  left: 15px;
+  height: 4px;
+  top: calc(50% - 2px);
+}
+.add-btn:hover .add-icon::after {
+  right: 15px;
+  height: 4px;
+  top: calc(50% - 2px);
 }

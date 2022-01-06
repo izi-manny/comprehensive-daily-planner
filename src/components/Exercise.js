@@ -2,10 +2,13 @@ import React from "react";
 
 function Exercise() {
   return (
-    <div>
+    <div className="feature-container">
       <h2>Exercise</h2>
       <input type="text" placeholder="Add a workout" />
-      <button className="fas fa-plus-circle"></button>
+      <button class="icon-btn add-btn">
+        <div class="add-icon"></div>
+        <div class="btn-txt">Add</div>
+      </button>
     </div>
   );
 }

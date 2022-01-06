@@ -2,7 +2,7 @@ import React from "react";
 
 function Sleep() {
   return (
-    <div>
+    <div className="feature-container">
       <h1>Sleep Log</h1>
       <textarea
         cols="30"

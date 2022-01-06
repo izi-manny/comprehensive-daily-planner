@@ -8,10 +8,13 @@ function Tasks() {
   };
 
   return (
-    <div>
+    <div className="feature-container">
       <h2>Tasks & Goals</h2>
-      <input type="text" placeholder="Add a task/goal" value={input} />
-      <button className="fas fa-plus-circle"></button>
+      <input type="text" placeholder="Add a task/goal" />
+      <button class="icon-btn add-btn">
+        <div class="add-icon"></div>
+        <div class="btn-txt">Add</div>
+      </button>
     </div>
   );
 }

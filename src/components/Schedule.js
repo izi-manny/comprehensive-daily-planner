@@ -255,7 +255,7 @@ export default class Agenda extends Component {
       );
     };
     return (
-      <div className="content-expanded ">
+      <div className="feature-container content-expanded">
         <div className="control-buttons">
           <h1>Schedule</h1>
           {/* <button className="button-control" onClick={this.zoomIn}>

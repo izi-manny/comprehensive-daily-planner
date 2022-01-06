@@ -97,41 +97,49 @@ function Meals() {
   }
 
   return (
-    <div>
+    <div className="feature-container">
       <h1>Meals</h1>
 
       <form onSubmit={submitForm}>
         <h2>Breakfast</h2>
-        <input
-          type="text"
-          id="breakfast"
-          placeholder="What would you like for breakfast?"
-        />
-        <button className="fas fa-plus-circle"></button>
+        <input type="text" id="breakfast" placeholder="What's for breakfast?" />
+        <button class="icon-btn add-btn">
+          <div class="add-icon"></div>
+          <div class="btn-txt">Add</div>
+        </button>
       </form>
 
       {breakfastMap()}
 
       <form onSubmit={submitForm}>
         <h2>Lunch</h2>
-        <input type="text" id="lunch" />
-        <button className="fas fa-plus-circle"></button>
+        <input type="text" id="lunch" placeholder="What's for lunch?" />
+        <button class="icon-btn add-btn">
+          <div class="add-icon"></div>
+          <div class="btn-txt">Add</div>
+        </button>
       </form>
 
       {lunchMap()}
 
       <form onSubmit={submitForm}>
         <h2>Dinner</h2>
-        <input type="text" id="dinner" />
-        <button className="fas fa-plus-circle"></button>
+        <input type="text" id="dinner" placeholder="What's for dinner?" />
+        <button class="icon-btn add-btn">
+          <div class="add-icon"></div>
+          <div class="btn-txt">Add</div>
+        </button>
       </form>
 
       {dinnerMap()}
 
       <form onSubmit={submitForm}>
         <h2>Snacks</h2>
-        <input type="text" id="snacks" />
-        <button className="fas fa-plus-circle"></button>
+        <input type="text" id="snacks" placeholder="Any munches?" />
+        <button class="icon-btn add-btn">
+          <div class="add-icon"></div>
+          <div class="btn-txt">Add</div>
+        </button>
       </form>
 
       {snackMap()}
