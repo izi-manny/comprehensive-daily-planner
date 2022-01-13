@@ -18,7 +18,7 @@ function Greeting() {
   return (
     <div>
       <h1>
-        Good {timeOfDay} {name}
+        Good {timeOfDay} {req.session.user.firstName}
       </h1>
     </div>
   );

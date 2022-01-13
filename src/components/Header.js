@@ -9,7 +9,6 @@ function Header() {
       <CurrentDate />
       <Greeting />
       <Quote />
-      {/* Login/Register button goes here */}
     </div>
   );
 }

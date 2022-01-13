@@ -45,7 +45,7 @@ function Meals() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/food", {
+      .get("http://localhost:5000/api/meals", {
         params: {
           userID: 1,
           date: new Date().toISOString().split("T")[0],
