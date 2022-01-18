@@ -46,7 +46,7 @@ module.exports = {
           '${hashPassword}'
         );`
         )
-        .then((dbRes) => res.status(200).send(dbRes[0]))
+        .then((dbRes) => res.status(201).send(dbRes[0]))
         .catch((err) => console.log(err));
     }
   },
@@ -76,6 +76,15 @@ module.exports = {
 
     req.session.user = user;
     res.status(200).send(user);
+  },
+
+  getUser: (req, res) => {
+    const { user } = req.session;
+    if (user) {
+      return res.status(200).send(user);
+    } else {
+      res.status(401);
+    }
   },
 
   meal: (req, res) => {

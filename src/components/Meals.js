@@ -47,7 +47,7 @@ function Meals() {
     axios
       .get("http://localhost:5000/api/meals", {
         params: {
-          userID: 1,
+          // userID: 1,
           date: new Date().toISOString().split("T")[0],
         },
       })
@@ -64,7 +64,7 @@ function Meals() {
     axios
       .post(`http://localhost:5000/api/meals/${category}`, {
         breakfastTitle: input,
-        userID: 1,
+        // userID: 1,
         date: new Date().toISOString().split("T")[0],
       })
       .then((res) => {

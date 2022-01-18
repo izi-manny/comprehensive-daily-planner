@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 function Greeting() {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    axios.get("/api/login").then((res) => {
+      setUser(res.data);
+    });
+  }, []);
+
+  console.log(user);
+
   const hour = new Date().getHours();
 
   const [name, setName] = useState("");
@@ -18,7 +29,8 @@ function Greeting() {
   return (
     <div>
       <h1>
-        Good {timeOfDay} {req.session.user.firstName}
+        Good {timeOfDay}
+        {/* {req.session.user.firstName} */}
       </h1>
     </div>
   );

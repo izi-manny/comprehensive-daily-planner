@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import useToken from "./useToken";
 
 function App() {
   // const { token, setToken } = useToken();
@@ -20,11 +19,11 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
 
-          {/* <Route path="dashboard" element={} /> */}
+          <Route path="dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </div>

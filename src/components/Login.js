@@ -21,12 +21,14 @@ function Login(props) {
   function loginUser(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/api/login", {
+      .post("http://localhost:3000/api/login", {
         username,
         password,
       })
       .then((res) => {
-        (user = res.data), navigate("/");
+        user = res.data;
+        console.log(user);
+        navigate("../dashboard");
       });
   }
 

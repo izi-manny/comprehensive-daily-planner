@@ -1,61 +1,118 @@
-import axios from "axios";
 import React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, useFormik, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 function Register() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const firstName = document.getElementById("first-name").value;
-    const lastName = document.getElementById("last-name").value;
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
-
-    if (password === confirmPassword) {
-      axios
-        .post("http://localhost:5000/api/register", {
-          firstName: firstName,
-          lastName: lastName,
-          username: username,
-          email: email,
-          password: password,
-        })
-        .then(() => {
-          navigate("/login");
-        });
-    } else {
-      // alert user that passwords don't match
-    }
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   };
 
+  const validationSchema = Yup.object({
+    firstName: Yup.string().min(3, "It's too short").required("Required"),
+    lastName: Yup.string().min(3, "It's too short").required("Required"),
+    email: Yup.string().email("Enter valid email").required("Required"),
+    password: Yup.string().required("Required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), ""], "Passwords must match")
+      .required("Required"),
+  });
+
+  const onSubmit = (values) => {
+    console.log(values);
+    axios
+      .post("http://localhost:3000/api/register", {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      })
+      .then(() => {
+        navigate("/login");
+      });
+  };
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+  });
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label for="first-name">First Name:</label>
-        <input id="first-name" type="text" required />
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      {(formik) => {
+        return (
+          <div>
+            <Form onSubmit={formik.handleSubmit}>
+              <input
+                type="text"
+                name="firstName"
+                onChange={formik.handleChange}
+                value={formik.values.firstName}
+                placeholder="First Name"
+              />
 
-        <label for="last-name">Last Name:</label>
-        <input id="last-name" type="text" required />
+              <input
+                type="text"
+                name="lastName"
+                onChange={formik.handleChange}
+                value={formik.values.lastName}
+                placeholder="Last Name"
+              />
 
-        <label for="username">Username:</label>
-        <input id="username" type="text" required />
+              <input
+                type="text"
+                name="username"
+                onChange={formik.handleChange}
+                value={formik.values.username}
+                placeholder="Username"
+              />
 
-        <label for="email">Email:</label>
-        <input id="email" type="text" required />
+              <input
+                type="email"
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                placeholder="Email"
+              />
+              <ErrorMessage name="password" />
+              <input
+                type="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Password"
+              />
+              <ErrorMessage name="password" />
 
-        <label for="password">Password:</label>
-        <input id="password" type="password" required />
+              <input
+                type="password"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                placeholder="Confirm Password"
+              />
 
-        <label for="confirm-password">Confirm Password:</label>
-        <input id="confirm-password" type="password" required />
-
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+              <button type="submit" disabled={!formik.isValid}>
+                Register
+              </button>
+            </Form>
+          </div>
+        );
+      }}
+    </Formik>
   );
 }
 

@@ -18,6 +18,8 @@ app.post("/api/register", controller.register);
 
 app.post("/api/login", controller.login);
 
+app.get("/api/login", controller.getUser);
+
 app.post("/api/meals/:category", controller.meal);
 
 app.get("/api/meals", controller.getMeals);
