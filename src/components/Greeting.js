@@ -1,20 +1,5 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-
 function Greeting() {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    axios.get("/api/login").then((res) => {
-      setUser(res.data);
-    });
-  }, []);
-
-  console.log(user);
-
   const hour = new Date().getHours();
-
-  const [name, setName] = useState("");
 
   let timeOfDay;
 
