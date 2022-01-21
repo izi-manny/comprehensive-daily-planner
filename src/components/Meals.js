@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 function Meals() {
   const [meal, setMeal] = useState();
-
-  console.log("meal state:", meal);
+  const isMounted = useRef(true);
 
   useEffect(() => {
     const bodyObj = {
@@ -15,10 +14,15 @@ function Meals() {
     axios
       .post("http://localhost:5000/api/getInfo", bodyObj)
       .then((res) => {
-        // console.log(res.data);
-        setMeal(res.data.meals[0]);
+        if (isMounted.current) {
+          setMeal(res.data.meals[0]);
+        }
       })
       .catch((err) => console.log(err));
+
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   function sendForm(input, category) {
