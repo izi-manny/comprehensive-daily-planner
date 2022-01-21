@@ -3,7 +3,6 @@ const { CONNECTION_STRING } = process.env;
 const { user } = require("pg/lib/defaults");
 const Sequelize = require("sequelize");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 // you wouldn't want to rejectUnauthorized in a production app, but it's great for practice
 const sequelize = new Sequelize(CONNECTION_STRING, {
@@ -23,15 +22,15 @@ module.exports = {
       `SELECT * FROM users WHERE username = '${username}'`
     );
 
+    // if any rows are returned in the metadata, it means the user already exists
     if (checkUsername[1].rowCount !== 0) {
       res.status(401).send("Username already exists");
     } else {
       const salt = bcrypt.genSaltSync(5);
       const hashPassword = bcrypt.hashSync(password, salt);
 
-      const newUser = await sequelize
-        .query(
-          `INSERT INTO users (
+      await sequelize.query(
+        `INSERT INTO users (
           user_first_name,
           user_last_name,
           username,
@@ -45,46 +44,95 @@ module.exports = {
           '${email}',
           '${hashPassword}'
         );`
-        )
-        .then((dbRes) => res.status(201).send(dbRes[0]))
-        .catch((err) => console.log(err));
+      );
+      const userInfo = await sequelize.query(`
+        SELECT user_id, username, user_first_name, user_last_name WHERE username= '${username}' `);
+      res.status(200).send(userInfo);
+      // .then((dbRes) => res.status(201).send(dbRes[0]))
+      // .catch((err) => console.log(err));
     }
   },
 
   login: async (req, res) => {
     const { username, password } = req.body;
 
-    const user = await sequelize
+    const validUser = await sequelize
       .query(`SELECT * FROM users WHERE username='${username}'`)
-      .then((dbRes) => dbRes[0][0]);
+      .catch((err) => console.log(err));
 
-    let { username: dbUsername, user_password: dbPassword } = user;
-
-    if (!dbUsername) {
-      return res.status(404).send("Username not found");
+    // console.log(validUser[0][0]);
+    if (validUser[1].rowCount === 1) {
+      if (bcrypt.compareSync(password, validUser[0][0].user_password)) {
+        let object = {
+          id: validUser[0][0].user_id,
+          firstName: validUser[0][0].user_first_name,
+          lastName: validUser[0][0].user_last_name,
+          username,
+        };
+        res.status(200).send(object);
+      } else {
+        res.status(401).send("Password is Incorrect");
+      }
+    } else {
+      res.status(401).send("Username is Incorrect");
     }
-
-    const authenticated = await bcrypt.compareSync(password, dbPassword);
-
-    if (!authenticated) {
-      return res.status(403).send("Not authorized");
-    }
-
-    delete user.user_password;
-
-    dbPassword = null;
-
-    req.session.user = user;
-    res.status(200).send(user);
   },
 
-  getUser: (req, res) => {
-    const { user } = req.session;
-    if (user) {
-      return res.status(200).send(user);
-    } else {
-      res.status(401);
-    }
+  getInfo: async (req, res) => {
+    const { userID, date } = req.body;
+    // console.log(req.body);
+
+    let sleep = await sequelize
+      .query(`SELECT * FROM sleep WHERE user_id=${userID} AND date='${date}'`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    sleep = sleep[1];
+
+    let meals = await sequelize
+      .query(`SELECT * FROM meals WHERE user_id=${userID} AND date='${date}'`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const tasks = await sequelize
+      .query(`SELECT * FROM tasks WHERE user_id=${userID} AND date='${date}'`)
+      .catch((err) => {
+        console.log(err);
+      });
+    const motivation = await sequelize
+      .query(
+        `SELECT * FROM motivation WHERE user_id=${userID} AND date='${date}'`
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    const exercise = await sequelize
+      .query(
+        `SELECT * FROM exercise WHERE user_id=${userID} AND date='${date}'`
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    const schedule = await sequelize
+      .query(
+        `SELECT * FROM schedule WHERE user_id=${userID} AND date='${date}'`
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const info = {
+      sleep,
+      meals,
+      tasks,
+      motivation,
+      exercise,
+      schedule,
+    };
+
+    res.status(200).send(info);
   },
 
   meal: (req, res) => {
@@ -112,26 +160,26 @@ module.exports = {
       .then((dbRes) => res.status(200).send(dbRes[0])) // awaits the result of the previous function
       .catch((err) => console.log(err));
   },
-  getMeals: async (req, res) => {
-    const { userID, date } = req.query;
-    const dinner = await sequelize.query(
-      `SELECT * FROM meals
-        WHERE user_id = ${userID} AND meal_category = 'Dinner' AND date = '${date}'`
-    );
-    const breakfast = await sequelize.query(
-      `SELECT * FROM meals
-        WHERE user_id = ${userID} AND meal_category = 'Breakfast' AND date = '${date}'`
-    );
-    const lunch = await sequelize.query(
-      `SELECT * FROM meals
-        WHERE user_id = ${userID} AND meal_category = 'Lunch' AND date = '${date}'`
-    );
-    const snacks = await sequelize.query(
-      `SELECT * FROM meals
-        WHERE user_id = ${userID} AND meal_category = 'Snacks' AND date = '${date}'`
-    );
+  // getMeals: async (req, res) => {
+  //   const { userID, date } = req.query;
+  //   const dinner = await sequelize.query(
+  //     `SELECT * FROM meals
+  //         WHERE user_id = ${userID} AND meal_category = 'Dinner' AND date = '${date}'`
+  //   );
+  //   const breakfast = await sequelize.query(
+  //     `SELECT * FROM meals
+  //         WHERE user_id = ${userID} AND meal_category = 'Breakfast' AND date = '${date}'`
+  //   );
+  //   const lunch = await sequelize.query(
+  //     `SELECT * FROM meals
+  //         WHERE user_id = ${userID} AND meal_category = 'Lunch' AND date = '${date}'`
+  //   );
+  //   const snacks = await sequelize.query(
+  //     `SELECT * FROM meals
+  //         WHERE user_id = ${userID} AND meal_category = 'Snacks' AND date = '${date}'`
+  //   );
 
-    const meals = [breakfast[0], lunch[0], dinner[0], snacks[0]];
-    res.status(200).send(meals);
-  },
+  //   const meals = [breakfast[0], lunch[0], dinner[0], snacks[0]];
+  //   res.status(200).send(meals);
+  // },
 };

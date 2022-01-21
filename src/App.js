@@ -1,31 +1,37 @@
-import React, { useState } from "react";
-import Header from "./components/Header";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
-import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
 import Register from "./components/Register";
 import Login from "./components/Login";
 
 function App() {
-  // const { token, setToken } = useToken();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const loginUser = () => setIsLoggedIn(!isLoggedIn);
 
-  // if (!token) {
-  //   return <Login setToken={setToken} />;
-  // }
+  useEffect(() => {
+    if (localStorage.getItem("id")) {
+      setIsLoggedIn(true);
+    }
+  });
+
+  const DataContext = createContext({});
+  const todaysDate = new Date().toISOString().split("T")[0];
 
   return (
     <div className="planner-app">
-      <BrowserRouter>
-        <Header />
+      <DataContext.Provider value={todaysDate}>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route
+            path="*"
+            element={
+              isLoggedIn ? <Dashboard /> : <Login logFunction={loginUser} />
+            }
+          />
           <Route path="register" element={<Register />} />
-          <Route path="login" element={<Login />} />
-
           <Route path="dashboard" element={<Dashboard />} />
         </Routes>
-      </BrowserRouter>
+      </DataContext.Provider>
     </div>
   );
 }

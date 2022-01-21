@@ -1,8 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, useFormik, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { ErrorMessage, useFormik } from "formik";
 
 function Register() {
   const navigate = useNavigate();
@@ -16,18 +15,8 @@ function Register() {
     confirmPassword: "",
   };
 
-  const validationSchema = Yup.object({
-    firstName: Yup.string().min(3, "It's too short").required("Required"),
-    lastName: Yup.string().min(3, "It's too short").required("Required"),
-    email: Yup.string().email("Enter valid email").required("Required"),
-    password: Yup.string().required("Required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), ""], "Passwords must match")
-      .required("Required"),
-  });
-
   const onSubmit = (values) => {
-    console.log(values);
+    // console.log(values);
     axios
       .post("http://localhost:3000/api/register", {
         firstName: values.firstName,
@@ -36,83 +25,104 @@ function Register() {
         email: values.email,
         password: values.password,
       })
-      .then(() => {
+      .then((res) => {
+        localStorage.setItem("username", res.data[0][0].username);
+        localStorage.setItem("username", res.data[0][0].firstName);
+        localStorage.setItem("username", res.data[0][0].lastName);
+        localStorage.setItem("username", res.data[0][0].userID);
+
         navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err.response.message);
       });
+  };
+
+  const validate = (values) => {
+    const errors = {};
+    if (!values.username) {
+      errors.username = "Username Required";
+    }
+    if (!values.password) {
+      errors.password = "Password Required";
+    } else if (values.password.length < 8) {
+      errors.password = "Password must be longer than 8 characters";
+    }
+    if (!values.firstName) {
+      errors.firstName = "Please insert First Name";
+    }
+
+    if (!values.confirmPassword) {
+      errors.confirmPassword = "PLease confirm password";
+    } else if (values.password !== values.confirmPassword) {
+      errors.confirmPassword = "Passwords must match";
+    }
+
+    return errors;
   };
 
   const formik = useFormik({
     initialValues,
     onSubmit,
+    validate,
   });
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {(formik) => {
-        return (
-          <div>
-            <Form onSubmit={formik.handleSubmit}>
-              <input
-                type="text"
-                name="firstName"
-                onChange={formik.handleChange}
-                value={formik.values.firstName}
-                placeholder="First Name"
-              />
+    <div>
+      <h2>Register</h2>
+      <form onSubmit={formik.handleSubmit}>
+        <label htmlFor="first-name">First Name:</label>
+        <input
+          type="text"
+          name="first-name"
+          onChange={formik.handleChange}
+          value={formik.values.firstName}
+          placeholder="First Name"
+        />
+        <label htmlFor="last-name">Last Name:</label>
+        <input
+          type="text"
+          name="last-name"
+          onChange={formik.handleChange}
+          value={formik.values.lastName}
+          placeholder="Last Name"
+        />
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          name="username"
+          onChange={formik.handleChange}
+          value={formik.values.username}
+          placeholder="Username"
+        />
 
-              <input
-                type="text"
-                name="lastName"
-                onChange={formik.handleChange}
-                value={formik.values.lastName}
-                placeholder="Last Name"
-              />
-
-              <input
-                type="text"
-                name="username"
-                onChange={formik.handleChange}
-                value={formik.values.username}
-                placeholder="Username"
-              />
-
-              <input
-                type="email"
-                name="email"
-                onChange={formik.handleChange}
-                value={formik.values.email}
-                placeholder="Email"
-              />
-              <ErrorMessage name="password" />
-              <input
-                type="password"
-                name="password"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                placeholder="Password"
-              />
-              <ErrorMessage name="password" />
-
-              <input
-                type="password"
-                name="confirmPassword"
-                onChange={formik.handleChange}
-                value={formik.values.confirmPassword}
-                placeholder="Confirm Password"
-              />
-
-              <button type="submit" disabled={!formik.isValid}>
-                Register
-              </button>
-            </Form>
-          </div>
-        );
-      }}
-    </Formik>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          name="password"
+          onChange={formik.handleChange}
+          value={formik.values.password}
+          placeholder="password"
+        />
+        <label htmlFor="confirm-password">Confirm Password:</label>
+        <input
+          type="confirm-password"
+          name="confirm-password"
+          onChange={formik.handleChange}
+          value={formik.values.confirmPassword}
+          placeholder="COnfirm Password"
+        />
+        <button type="submit">Register</button>
+      </form>
+      <div>
+        {formik.errors.username ? <div>{formik.errors.username}</div> : null}
+        {formik.errors.firstName ? <div>{formik.errors.firstName}</div> : null}
+        {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+        {formik.errors.confirmPassword ? (
+          <div>{formik.errors.confirmPassword}</div>
+        ) : null}
+      </div>
+    </div>
   );
 }
 

@@ -1,57 +1,69 @@
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 
 function Login(props) {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  let user;
+  let navigate = useNavigate();
 
-  const navigate = useNavigate();
+  const initialValues = {
+    username: "",
+    password: "",
+  };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const token = await loginUser({
-  //     username,
-  //     password,
-  //   });
-  //   setToken(token);
-  // };
-
-  function loginUser(e) {
-    e.preventDefault();
+  const onSubmit = (values) => {
     axios
-      .post("http://localhost:3000/api/login", {
-        username,
-        password,
-      })
+      .post("http://localhost:5000/api/login", values)
       .then((res) => {
-        user = res.data;
-        console.log(user);
-        navigate("../dashboard");
+        localStorage.setItem("username", res.data.username);
+        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("firstName", res.data.firstName);
+        localStorage.setItem("lastName", res.data.lastName);
+        props.logFunction();
+        navigate("/Dashboard");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
       });
-  }
+  };
+
+  const validate = (values) => {
+    const errors = {};
+    if (!values.username) {
+      errors.username = "Username Required";
+    }
+    if (!values.password) {
+      errors.password = "Please enter a password";
+    }
+  };
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+    validate,
+  });
 
   return (
-    <div className="login-wrapper">
-      <h1>Log In</h1>
-      <form onSubmit={loginUser}>
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
-          id="username"
           type="text"
-          required
-          onChange={(e) => setUsername(e.target.value)}
+          name="username"
+          onChange={formik.handleChange}
+          value={formik.values.username}
+          placeholder="Enter username"
         />
 
         <label htmlFor="password">Password:</label>
         <input
-          id="password"
           type="password"
-          required
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          onChange={formik.handleChange}
+          value={formik.values.password}
+          placeholder="Enter password"
         />
-
         <button type="submit">Sign In</button>
       </form>
     </div>

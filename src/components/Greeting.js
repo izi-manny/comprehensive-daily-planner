@@ -29,8 +29,7 @@ function Greeting() {
   return (
     <div>
       <h1>
-        Good {timeOfDay}
-        {/* {req.session.user.firstName} */}
+        Good {timeOfDay}, <br /> {localStorage.getItem("firstName")}
       </h1>
     </div>
   );

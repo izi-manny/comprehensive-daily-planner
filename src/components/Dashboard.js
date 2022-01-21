@@ -5,10 +5,12 @@ import Motivation from "./Motivation";
 import Schedule from "./Schedule";
 import Sleep from "./Sleep";
 import Tasks from "./Tasks";
+import Header from "./Header";
 
 function Body() {
   return (
-    <div className="app-body">
+    <div>
+      <Header />
       <div>
         <Sleep />
         <Meals />

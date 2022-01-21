@@ -2,69 +2,30 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Meals() {
-  //   const [input, setInput] = useState("");
+  const [meal, setMeal] = useState();
 
-  const [meal, setMeal] = useState([
-    [
-      {
-        meal_id: 0,
-        meal_category: "",
-        meal_title: "",
-        user_id: 0,
-        date: "",
-      },
-    ],
-    [
-      {
-        meal_id: 0,
-        meal_category: "",
-        meal_title: "",
-        user_id: 0,
-        date: "",
-      },
-    ],
-    [
-      {
-        meal_id: 0,
-        meal_category: "",
-        meal_title: "",
-        user_id: 0,
-        date: "",
-      },
-    ],
-    [
-      {
-        meal_id: 0,
-        meal_category: "",
-        meal_title: "",
-        user_id: 0,
-        date: "",
-      },
-    ],
-  ]);
+  console.log("meal state:", meal);
 
   useEffect(() => {
+    const bodyObj = {
+      userID: +localStorage.getItem("id"),
+      date: new Date().toISOString().split("T")[0],
+    };
+
     axios
-      .get("http://localhost:5000/api/meals", {
-        params: {
-          // userID: 1,
-          date: new Date().toISOString().split("T")[0],
-        },
-      })
+      .post("http://localhost:5000/api/getInfo", bodyObj)
       .then((res) => {
-        console.log(res);
-        setMeal(res.data);
+        // console.log(res.data);
+        setMeal(res.data.meals[0]);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, []);
 
   function sendForm(input, category) {
     axios
       .post(`http://localhost:5000/api/meals/${category}`, {
         breakfastTitle: input,
-        // userID: 1,
+        userID: +localStorage.getItem("id"),
         date: new Date().toISOString().split("T")[0],
       })
       .then((res) => {
@@ -81,19 +42,35 @@ function Meals() {
   }
 
   function breakfastMap() {
-    return meal[0].map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
+    return meal.map((element) => {
+      if (element.meal_category === "Breakfast") {
+        return <p key={element.meal_id}>{element.meal_title}</p>;
+      }
+    });
   }
 
   function lunchMap() {
-    return meal[1].map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
+    return meal.map((element) => {
+      if (element.meal_category === "Lunch") {
+        return <p key={element.meal_id}>{element.meal_title}</p>;
+      }
+    });
   }
 
   function dinnerMap() {
-    return meal[2].map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
+    return meal.map((element) => {
+      if (element.meal_category === "Dinner") {
+        return <p key={element.meal_id}>{element.meal_title}</p>;
+      }
+    });
   }
 
   function snackMap() {
-    return meal[3].map((obj) => <p key={obj.meal_id}>{obj.meal_title}</p>);
+    return meal.map((element) => {
+      if (element.meal_category === "Snacks") {
+        return <p key={element.meal_id}>{element.meal_title}</p>;
+      }
+    });
   }
 
   return (
@@ -109,7 +86,7 @@ function Meals() {
         </button>
       </form>
 
-      {breakfastMap()}
+      {meal ? breakfastMap() : null}
 
       <form onSubmit={submitForm}>
         <h2>Lunch</h2>
@@ -120,7 +97,7 @@ function Meals() {
         </button>
       </form>
 
-      {lunchMap()}
+      {meal ? lunchMap() : null}
 
       <form onSubmit={submitForm}>
         <h2>Dinner</h2>
@@ -131,7 +108,7 @@ function Meals() {
         </button>
       </form>
 
-      {dinnerMap()}
+      {meal ? dinnerMap() : null}
 
       <form onSubmit={submitForm}>
         <h2>Snacks</h2>
@@ -142,7 +119,7 @@ function Meals() {
         </button>
       </form>
 
-      {snackMap()}
+      {meal ? snackMap() : null}
     </div>
   );
 }
