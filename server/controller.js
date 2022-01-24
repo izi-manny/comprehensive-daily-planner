@@ -80,7 +80,6 @@ module.exports = {
 
   getInfo: async (req, res) => {
     const { userID, date } = req.body;
-    // console.log(req.body);
 
     let sleep = await sequelize
       .query(`SELECT * FROM sleep WHERE user_id=${userID} AND date='${date}'`)
@@ -158,6 +157,18 @@ module.exports = {
             );`
       )
       .then((dbRes) => res.status(200).send(dbRes[0])) // awaits the result of the previous function
+      .catch((err) => console.log(err));
+  },
+
+  deleteMeal: async (req, res) => {
+    // console.log(req.body);
+    const { user, meal_ID } = req.body;
+    // console.log(user);
+    // console.log(meal_id);
+
+    await sequelize
+      .query(`DELETE FROM meals WHERE user_id=${user} AND meal_id='${meal_ID}'`)
+      .then(() => res.status(200).send("Meal removed successfully"))
       .catch((err) => console.log(err));
   },
   // getMeals: async (req, res) => {

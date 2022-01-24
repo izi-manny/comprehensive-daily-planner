@@ -25,4 +25,6 @@ app.post("/api/meals/:category", controller.meal);
 
 app.post("/api/getInfo", controller.getInfo);
 
+app.delete("/api/removeMeal", controller.deleteMeal);
+
 app.listen(PORT, () => console.log(`up on ${PORT}`));

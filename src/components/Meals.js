@@ -1,39 +1,56 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { MdModeEdit, MdDeleteForever } from "react-icons/md";
+import "./Meals.css";
+import { useNavigate } from "react-router-dom";
+import FlipMove from "react-flip-move";
 
 function Meals() {
-  const [meal, setMeal] = useState();
-  const isMounted = useRef(true);
+  let navigate = useNavigate();
 
-  useEffect(() => {
+  const [meal, setMeal] = useState();
+  // console.log(meal);
+
+  function getInfo() {
     const bodyObj = {
       userID: +localStorage.getItem("id"),
-      date: new Date().toISOString().split("T")[0],
+      // date converted from UTC to local time
+      date: new Date(
+        new Date().getTime() - new Date().getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .substring(0, 10),
     };
 
     axios
       .post("http://localhost:5000/api/getInfo", bodyObj)
       .then((res) => {
-        if (isMounted.current) {
-          setMeal(res.data.meals[0]);
-        }
+        setMeal(res.data.meals[0]);
       })
       .catch((err) => console.log(err));
+  }
 
-    return () => {
-      isMounted.current = false;
-    };
+  useEffect(() => {
+    getInfo();
   }, []);
 
   function sendForm(input, category) {
+    if (!input || /^\s*$/.test(input)) {
+      return;
+    }
     axios
       .post(`http://localhost:5000/api/meals/${category}`, {
         breakfastTitle: input,
         userID: +localStorage.getItem("id"),
-        date: new Date().toISOString().split("T")[0],
+        date: new Date(
+          new Date().getTime() - new Date().getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .substring(0, 10),
       })
       .then((res) => {
         console.log(res);
+        getInfo();
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +65,17 @@ function Meals() {
   function breakfastMap() {
     return meal.map((element) => {
       if (element.meal_category === "Breakfast") {
-        return <p key={element.meal_id}>{element.meal_title}</p>;
+        return (
+          <div className="meal-list">
+            <p key={element.meal_id}>
+              {element.meal_title}
+              <span>
+                <MdModeEdit />
+                <MdDeleteForever onClick={() => deleteMeal(element.meal_id)} />
+              </span>
+            </p>
+          </div>
+        );
       }
     });
   }
@@ -56,7 +83,13 @@ function Meals() {
   function lunchMap() {
     return meal.map((element) => {
       if (element.meal_category === "Lunch") {
-        return <p key={element.meal_id}>{element.meal_title}</p>;
+        return (
+          <div>
+            <p key={element.meal_id}>{element.meal_title}</p>
+            <MdModeEdit />
+            <MdDeleteForever />
+          </div>
+        );
       }
     });
   }
@@ -64,7 +97,13 @@ function Meals() {
   function dinnerMap() {
     return meal.map((element) => {
       if (element.meal_category === "Dinner") {
-        return <p key={element.meal_id}>{element.meal_title}</p>;
+        return (
+          <div>
+            <p key={element.meal_id}>{element.meal_title}</p>
+            <MdModeEdit />
+            <MdDeleteForever />
+          </div>
+        );
       }
     });
   }
@@ -72,9 +111,31 @@ function Meals() {
   function snackMap() {
     return meal.map((element) => {
       if (element.meal_category === "Snacks") {
-        return <p key={element.meal_id}>{element.meal_title}</p>;
+        return (
+          <div>
+            <p key={element.meal_id}>
+              {element.meal_title}
+              <MdModeEdit />
+              <MdDeleteForever />
+            </p>
+          </div>
+        );
       }
     });
+  }
+
+  function deleteMeal(mealID) {
+    let user = +localStorage.getItem("id");
+
+    axios
+      .delete(`http://localhost:5000/api/removeMeal`, {
+        data: { user: user, meal_ID: mealID },
+      })
+      .then((res) => {
+        console.log(res.data);
+        getInfo();
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -89,8 +150,9 @@ function Meals() {
           <div class="btn-txt">Add</div>
         </button>
       </form>
-
-      {meal ? breakfastMap() : null}
+      <FlipMove duration={500} easing="ease-in-out">
+        {meal ? breakfastMap() : null}
+      </FlipMove>
 
       <form onSubmit={submitForm}>
         <h2>Lunch</h2>
@@ -101,7 +163,9 @@ function Meals() {
         </button>
       </form>
 
-      {meal ? lunchMap() : null}
+      <FlipMove duration={500} easing="ease-in-out">
+        {meal ? lunchMap() : null}
+      </FlipMove>
 
       <form onSubmit={submitForm}>
         <h2>Dinner</h2>
