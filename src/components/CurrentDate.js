@@ -4,7 +4,7 @@ function CurrentDate() {
   const showDate = new Date();
   const newDate = showDate.toDateString();
 
-  return <div>{newDate}</div>;
+  return <div className="todays-date"> {newDate}</div>;
 }
 
 export default CurrentDate;

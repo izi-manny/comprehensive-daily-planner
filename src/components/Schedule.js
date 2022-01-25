@@ -11,6 +11,7 @@ import {
   Modal,
 } from "react-agenda";
 import "./Schedule.css";
+import { AiFillSchedule } from "react-icons/ai";
 
 let now = new Date();
 
@@ -257,7 +258,12 @@ export default class Agenda extends Component {
     return (
       <div className="feature-container content-expanded">
         <div className="control-buttons">
-          <h1>Schedule</h1>
+          <div className="feature-header">
+            <h1>Schedule</h1>
+            <span className="feature-icon">
+              <AiFillSchedule />
+            </span>
+          </div>
           {/* <button className="button-control" onClick={this.zoomIn}>
             {" "}
             <i className="zoom-plus-icon"></i>{" "}

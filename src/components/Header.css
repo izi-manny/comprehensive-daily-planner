@@ -1,0 +1,102 @@
+.app-header {
+  display: flex;
+  flex-direction: column;
+  /* grid-template-columns: 1fr 1fr 1fr; */
+  margin: 30px;
+  padding: 20px;
+}
+
+.outer-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.app-logo img {
+  max-width: 100%;
+  height: 150px;
+}
+
+.app-logo h1 {
+  font-family: "Righteous", cursive;
+  padding-left: 100px;
+  font-size: 2.8em;
+  color: #000000;
+  text-shadow: -1px 1px 0 #41b6ba, 1px 1px 0 #c63d2b, 1px -1px 0 #42afac,
+    -1px -1px 0 #c6c23f;
+}
+
+.greeting-container {
+  display: flex;
+  align-items: top;
+  align-content: top;
+  min-width: 350px;
+}
+
+.outer-container-greeting {
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+  justify-content: flex-end;
+}
+
+.quote blockquote {
+  width: 400px;
+  font-weight: 900;
+  color: #2b2406;
+}
+
+.simple-highlight {
+  background-color: rgba(255, 255, 0, 0.445);
+  padding: 0.1em 0.2em;
+}
+
+.todays-date {
+  margin-top: 10px;
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+blockquote {
+  font-weight: 100;
+  font-size: 1.2rem;
+  max-width: 600px;
+  line-height: 1.4;
+  position: relative;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+blockquote:before,
+blockquote:after {
+  position: absolute;
+  color: #f1efe6;
+  font-size: 8rem;
+  width: 4rem;
+  height: 4rem;
+}
+
+blockquote:before {
+  content: "\201c";
+  font-family: "special-elite";
+  /* content: "“"; */
+  left: -5rem;
+  top: -2rem;
+}
+
+blockquote:after {
+  font-family: "special-elite";
+  content: "”";
+  right: -5rem;
+  bottom: 1rem;
+}
+
+cite {
+  line-height: 3;
+  text-align: left;
+}
+
+.signoff-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

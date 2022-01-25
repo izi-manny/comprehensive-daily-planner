@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { MdModeEdit, MdDeleteForever } from "react-icons/md";
+import { GiMeal } from "react-icons/gi";
+
 import "./Meals.css";
 import { useNavigate } from "react-router-dom";
 import FlipMove from "react-flip-move";
@@ -51,6 +53,7 @@ function Meals() {
       .then((res) => {
         console.log(res);
         getInfo();
+        setMeal("");
       })
       .catch((err) => {
         console.log(err);
@@ -70,7 +73,7 @@ function Meals() {
             <p key={element.meal_id}>
               {element.meal_title}
               <span>
-                <MdModeEdit />
+                {/* <MdModeEdit /> */}
                 <MdDeleteForever onClick={() => deleteMeal(element.meal_id)} />
               </span>
             </p>
@@ -84,10 +87,14 @@ function Meals() {
     return meal.map((element) => {
       if (element.meal_category === "Lunch") {
         return (
-          <div>
-            <p key={element.meal_id}>{element.meal_title}</p>
-            <MdModeEdit />
-            <MdDeleteForever />
+          <div className="meal-list">
+            <p key={element.meal_id}>
+              {element.meal_title}
+              <span>
+                {/* <MdModeEdit /> */}
+                <MdDeleteForever onClick={() => deleteMeal(element.meal_id)} />
+              </span>
+            </p>
           </div>
         );
       }
@@ -98,10 +105,14 @@ function Meals() {
     return meal.map((element) => {
       if (element.meal_category === "Dinner") {
         return (
-          <div>
-            <p key={element.meal_id}>{element.meal_title}</p>
-            <MdModeEdit />
-            <MdDeleteForever />
+          <div className="meal-list">
+            <p key={element.meal_id}>
+              {element.meal_title}
+              <span>
+                {/* <MdModeEdit /> */}
+                <MdDeleteForever onClick={() => deleteMeal(element.meal_id)} />
+              </span>
+            </p>
           </div>
         );
       }
@@ -112,11 +123,13 @@ function Meals() {
     return meal.map((element) => {
       if (element.meal_category === "Snacks") {
         return (
-          <div>
+          <div className="meal-list">
             <p key={element.meal_id}>
               {element.meal_title}
-              <MdModeEdit />
-              <MdDeleteForever />
+              <span>
+                {/* <MdModeEdit /> */}
+                <MdDeleteForever onClick={() => deleteMeal(element.meal_id)} />
+              </span>
             </p>
           </div>
         );
@@ -140,7 +153,12 @@ function Meals() {
 
   return (
     <div className="feature-container">
-      <h1>Meals</h1>
+      <div className="feature-header">
+        <h1>Meals</h1>
+        <span className="feature-icon">
+          <GiMeal />
+        </span>
+      </div>
 
       <form onSubmit={submitForm}>
         <h2>Breakfast</h2>
@@ -150,7 +168,7 @@ function Meals() {
           <div class="btn-txt">Add</div>
         </button>
       </form>
-      <FlipMove duration={500} easing="ease-in-out">
+      <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
         {meal ? breakfastMap() : null}
       </FlipMove>
 
@@ -163,7 +181,7 @@ function Meals() {
         </button>
       </form>
 
-      <FlipMove duration={500} easing="ease-in-out">
+      <FlipMove enterAnimation="elevator" leaveAnimation="elevator">
         {meal ? lunchMap() : null}
       </FlipMove>
 

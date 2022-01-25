@@ -6,22 +6,27 @@ import Schedule from "./Schedule";
 import Sleep from "./Sleep";
 import Tasks from "./Tasks";
 import Header from "./Header";
+import "./Dashboard.css";
 
 function Body() {
   return (
     <div>
-      <Header />
-      <div>
-        <Sleep />
-        <Meals />
+      <div className="app-header">
+        <Header />
       </div>
-      <div>
-        <Schedule />
-      </div>
-      <div>
-        <Tasks />
-        <Motivation />
-        <Exercise />
+      <div className="app-body">
+        <div>
+          <Sleep />
+          <Meals />
+        </div>
+        <div>
+          <Schedule />
+        </div>
+        <div>
+          <Tasks />
+          <Motivation />
+          <Exercise />
+        </div>
       </div>
     </div>
   );

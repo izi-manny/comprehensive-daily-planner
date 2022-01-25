@@ -1,9 +1,15 @@
 import React from "react";
+import { GiNightSleep } from "react-icons/gi";
 
 function Sleep() {
   return (
     <div className="feature-container">
-      <h1>Sleep Log</h1>
+      <div className="feature-header">
+        <h1>Sleep Log</h1>
+        <span className="feature-icon">
+          <GiNightSleep />
+        </span>
+      </div>
       <textarea
         cols="30"
         rows="10"

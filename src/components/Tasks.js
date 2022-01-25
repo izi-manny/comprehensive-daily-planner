@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaTasks } from "react-icons/fa";
 
 function Tasks() {
   const [input, setInput] = useState("");
@@ -9,7 +10,12 @@ function Tasks() {
 
   return (
     <div className="feature-container">
-      <h2>Tasks & Goals</h2>
+      <div className="feature-header">
+        <h1>Tasks / Goals</h1>
+        <span className="feature-icon">
+          <FaTasks />
+        </span>
+      </div>
       <input type="text" placeholder="Add a task/goal" />
       <button class="icon-btn add-btn">
         <div class="add-icon"></div>

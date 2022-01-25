@@ -1,7 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
+import { FaUser } from "react-icons/fa";
+import { MdPassword, MdEmail } from "react-icons/md";
+import { BiRename, BiUserCircle } from "react-icons/bi";
+import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
@@ -18,7 +22,7 @@ function Register() {
   const onSubmit = (values) => {
     // console.log(values);
     axios
-      .post("http://localhost:3000/api/register", {
+      .post("http://localhost:5000/api/register", {
         firstName: values.firstName,
         lastName: values.lastName,
         username: values.username,
@@ -26,20 +30,25 @@ function Register() {
         password: values.password,
       })
       .then((res) => {
+        console.log(res);
         localStorage.setItem("username", res.data[0][0].username);
-        localStorage.setItem("username", res.data[0][0].firstName);
-        localStorage.setItem("username", res.data[0][0].lastName);
-        localStorage.setItem("username", res.data[0][0].userID);
+        localStorage.setItem("firstName", res.data[0][0].firstName);
+        localStorage.setItem("lastName", res.data[0][0].lastName);
+        localStorage.setItem("ID", res.data[0][0].userID);
 
         navigate("/login");
       })
       .catch((err) => {
-        console.log(err.response.message);
+        console.log(err.response.data);
       });
   };
 
   const validate = (values) => {
     const errors = {};
+    if (!values.firstName) {
+      errors.firstName = "Please insert First Name";
+    }
+
     if (!values.username) {
       errors.username = "Username Required";
     }
@@ -47,9 +56,6 @@ function Register() {
       errors.password = "Password Required";
     } else if (values.password.length < 8) {
       errors.password = "Password must be longer than 8 characters";
-    }
-    if (!values.firstName) {
-      errors.firstName = "Please insert First Name";
     }
 
     if (!values.confirmPassword) {
@@ -68,51 +74,85 @@ function Register() {
   });
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="register-container">
+      <h2>Signup</h2>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="first-name">First Name:</label>
-        <input
-          type="text"
-          name="first-name"
-          onChange={formik.handleChange}
-          value={formik.values.firstName}
-          placeholder="First Name"
-        />
-        <label htmlFor="last-name">Last Name:</label>
-        <input
-          type="text"
-          name="last-name"
-          onChange={formik.handleChange}
-          value={formik.values.lastName}
-          placeholder="Last Name"
-        />
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          name="username"
-          onChange={formik.handleChange}
-          value={formik.values.username}
-          placeholder="Username"
-        />
+        <div className="input-icon-wrap">
+          <span>
+            <FaUser />
+          </span>
+          <span>
+            <input
+              type="text"
+              name="firstName"
+              onChange={formik.handleChange}
+              value={formik.values.firstName}
+              placeholder="First Name"
+            />
+          </span>
+          <span>
+            <BiUserCircle />
+          </span>
+          <span>
+            <input
+              type="text"
+              name="lastName"
+              onChange={formik.handleChange}
+              value={formik.values.lastName}
+              placeholder="Last Name"
+            />
+          </span>
+          <span>
+            <BiRename />
+          </span>
+          <span>
+            <input
+              type="text"
+              name="username"
+              onChange={formik.handleChange}
+              value={formik.values.username}
+              placeholder="Username"
+            />
+          </span>
+          <span>
+            <MdEmail />
+          </span>
+          <span>
+            <input
+              type="text"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              placeholder="Email"
+            />
+          </span>
+          <span>
+            <MdPassword />
+          </span>
+          <span>
+            <input
+              type="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="password"
+            />
+          </span>
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          name="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          placeholder="password"
-        />
-        <label htmlFor="confirm-password">Confirm Password:</label>
-        <input
-          type="confirm-password"
-          name="confirm-password"
-          onChange={formik.handleChange}
-          value={formik.values.confirmPassword}
-          placeholder="COnfirm Password"
-        />
-        <button type="submit">Register</button>
+          <span>
+            <MdPassword />
+          </span>
+          <span>
+            <input
+              type="password"
+              name="confirmPassword"
+              onChange={formik.handleChange}
+              value={formik.values.confirmPassword}
+              placeholder="Confirm Password"
+            />
+          </span>
+        </div>
+        <button type="submit">Sign Up!</button>
       </form>
       <div>
         {formik.errors.username ? <div>{formik.errors.username}</div> : null}
